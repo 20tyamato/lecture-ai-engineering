@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      BASELINE_ACCURACY: 0.75
     steps:
     - uses: actions/checkout@v3
     
@@ -39,3 +41,6 @@ jobs:
     - name: Run model tests
       run: |
         pytest day5/演習3/tests/test_model.py -v
+    
+    - name: Run regression (差分) tests
+        run: pytest day5/演習3/tests/test_diff.py -v
