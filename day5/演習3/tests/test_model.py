@@ -133,8 +133,10 @@ def test_model_inference_time(train_model):
 
     inference_time = end_time - start_time
 
+    baseline = float(os.getenv("BASELINE_SPEED", 1.0))
+
     # 推論時間が1秒未満であることを確認
-    assert inference_time < 1.0, f"推論時間が長すぎます: {inference_time}秒"
+    assert inference_time < baseline, f"推論時間が長すぎます: {inference_time}秒"
 
 
 def test_model_reproducibility(sample_data, preprocessor):
@@ -169,6 +171,6 @@ def test_model_reproducibility(sample_data, preprocessor):
     predictions1 = model1.predict(X_test)
     predictions2 = model2.predict(X_test)
 
-    assert np.array_equal(
-        predictions1, predictions2
-    ), "モデルの予測結果に再現性がありません"
+    assert np.array_equal(predictions1, predictions2), (
+        "モデルの予測結果に再現性がありません"
+    )

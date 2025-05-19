@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BASELINE_ACCURACY: 0.75
+      BASELINE_SPEED: 1.0
     steps:
     - uses: actions/checkout@v3
     
