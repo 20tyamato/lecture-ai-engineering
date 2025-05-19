@@ -1,16 +1,17 @@
 import os
-import pytest
-import pandas as pd
-import numpy as np
 import pickle
 import time
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+import numpy as np
+import pandas as pd
+import pytest
 from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 # テスト用データとモデルパスを定義
 DATA_PATH = os.path.join(os.path.dirname(__file__), "../data/Titanic.csv")
@@ -116,9 +117,9 @@ def test_model_accuracy(train_model):
     # 予測と精度計算
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
+    baseline = float(os.getenv("BASELINE_ACCURACY", 0.75))
 
-    # Titanicデータセットでは0.75以上の精度が一般的に良いとされる
-    assert accuracy >= 0.75, f"モデルの精度が低すぎます: {accuracy}"
+    assert accuracy >= baseline, f"モデルの精度が低すぎます: {accuracy}"
 
 
 def test_model_inference_time(train_model):
@@ -132,8 +133,10 @@ def test_model_inference_time(train_model):
 
     inference_time = end_time - start_time
 
+    baseline = float(os.getenv("BASELINE_SPEED", 1.0))
+
     # 推論時間が1秒未満であることを確認
-    assert inference_time < 1.0, f"推論時間が長すぎます: {inference_time}秒"
+    assert inference_time < baseline, f"推論時間が長すぎます: {inference_time}秒"
 
 
 def test_model_reproducibility(sample_data, preprocessor):
